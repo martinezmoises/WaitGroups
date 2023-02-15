@@ -1,51 +1,40 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"sync"
+	"strings"
 )
 
-// Since wg is a pointer, you need to put the reference of the pointer in the parameter or else you would
-// be using the same value always (passing copies)
-func one(wg *sync.WaitGroup) {
-	defer wg.Done() //Decreamenting 1 to the counter
-	fmt.Println("hola")
-}
-
-func two(wg *sync.WaitGroup) {
-	defer wg.Done()
-	fmt.Println("ni hao")
-}
-
-func three(wg *sync.WaitGroup) {
-	defer wg.Done()
-	fmt.Println("hello")
-}
+//domnstrate flags
 
 func main() {
+	msg := flag.String("msg", "Howdy, stranger!", "the message")
+	num := flag.Int("num", 1, "How many times to print the message")
+	caps := flag.Bool("U", false, "Specify whether to uppercase the string(true/false)")
+	reverse := flag.Bool("r", false, "reverse the string (true or false) ")
 
-	var wg sync.WaitGroup //Tis is a pointer
-	wg.Add(3)             //Adding value of 3 to the counter because there is 3 functions\
-	go one(&wg)           //Dereferencing it
-	go two(&wg)
-	go three(&wg)
-	/*
-		func() {
-			defer wg.Done() //Decreamenting 1 to the counter
-			fmt.Println("hola")
-		}()
+	flag.Parse()
+	// check if it is should be uppercase before printing it.
+	if *caps {
+		*msg = strings.ToUpper(*msg)
+	}
 
-		func() {
-			defer wg.Done()
-			fmt.Println("ni hao")
-		}()
+	//check if we shoul reverse the string
+	if *reverse {
+		//Reversing the string
+		var result string
+		for _, v := range *msg {
+			result = string(v) + result
+		}
 
-		func() {
-			defer wg.Done()
-			fmt.Println("hello")
-		}()
-	*/
+		//Write the reversed string to the msg variable
+		*msg = result
+	}
 
-	//	wg.Wait() //Once the counter is 0 or NULL, Continue with the main
+	//print the s string
+	for i := 0; i < *num; i++ {
+		fmt.Println(*msg)
+	}
 
 }
