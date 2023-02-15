@@ -46,6 +46,6 @@ func main() {
 		}()
 	*/
 
-	wg.Wait() //Once the counter is 0 or NULL, Continue with the main
+	//	wg.Wait() //Once the counter is 0 or NULL, Continue with the main
 
 }
